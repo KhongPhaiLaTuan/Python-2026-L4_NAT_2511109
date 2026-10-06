@@ -171,6 +171,36 @@ def list_students(stdscr, students):
     stdscr.refresh()
     stdscr.getch()
 
+def average_gpa(students):
+    for student in students:
+        scores = np.array(list(student["Marks"].values()))
+        if len(scores) == 0:
+            student["GPA"] = 0
+        else:
+            student["GPA"] = np.mean(scores)
+
+def partition(students, low, high):
+    # pivot
+    x = rn.randint(low, high)
+    students[x], students[high] = (students[high], students[x])
+    pivot = students[high]["GPA"]
+    i = low - 1
+
+    for j in range(low, high):
+        if students[j]["GPA"] > pivot:
+            i += 1
+            students[i], students[j] = students[j], students[i]
+
+    students[i + 1], students[high] = (students[high], students[i + 1])
+
+    return i + 1
+
+def sort_by_gpa(students, low, high):
+    if low < high:
+        x = partition(students, low, high)
+        sort_by_gpa(students, low, x - 1)
+        sort_by_gpa(students, x + 1, high)
+
 def scores_input(stdscr, students, courses):
     if not students:
         curses_message(stdscr, "There are no students.")
@@ -272,35 +302,6 @@ def show_course_marks(stdscr, students, courses):
     stdscr.refresh()
     stdscr.getch()
 
-def average_gpa(students):
-    for student in students:
-        scores = np.array(list(student["Marks"].values()))
-        if len(scores) == 0:
-            student["GPA"] = 0
-        else:
-            student["GPA"] = np.mean(scores)
-
-def partition(students, low, high):
-    # pivot
-    x = rn.randint(low, high)
-    students[x], students[high] = (students[high], students[x])
-    pivot = students[high]["GPA"]
-    i = low - 1
-
-    for j in range(low, high):
-        if students[j]["GPA"] > pivot:
-            i += 1
-            students[i], students[j] = students[j], students[i]
-
-    students[i + 1], students[high] = (students[high], students[i + 1])
-
-    return i + 1
-
-def sort_by_gpa(students, low, high):
-    if low < high:
-        x = partition(students, low, high)
-        sort_by_gpa(students, low, x - 1)
-        sort_by_gpa(students, x + 1, high)
 
 def sort_students_by_gpa(stdscr, students):
     if not students:
@@ -396,7 +397,6 @@ def main_menu(stdscr, students, courses):
             selected = len(options) - 1
         elif selected >= len(options):
             selected = 0
-
 
 # Program
 
