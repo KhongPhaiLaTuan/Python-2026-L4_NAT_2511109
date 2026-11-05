@@ -1,5 +1,5 @@
 import curses
-from helper import curses_message, sort_by_gpa
+from helper import curses_message
 from input import curses_input
 from domains import Course, Student
 def list_courses(stdscr, courses):
@@ -83,5 +83,5 @@ def sort_students_by_gpa(stdscr, students):
     if not students:
         curses_message(stdscr, "There are no students.")
         return
-    sort_by_gpa(students, 0, len(students) - 1)
+    students.sort(key=lambda s: s.gpa, reverse=True)
     curses_message(stdscr, "Students sorted by GPA (highest to lowest).")

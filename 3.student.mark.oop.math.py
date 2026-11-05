@@ -179,28 +179,6 @@ def average_gpa(students):
         else:
             student["GPA"] = np.mean(scores)
 
-def partition(students, low, high):
-    # pivot
-    x = rn.randint(low, high)
-    students[x], students[high] = (students[high], students[x])
-    pivot = students[high]["GPA"]
-    i = low - 1
-
-    for j in range(low, high):
-        if students[j]["GPA"] > pivot:
-            i += 1
-            students[i], students[j] = students[j], students[i]
-
-    students[i + 1], students[high] = (students[high], students[i + 1])
-
-    return i + 1
-
-def sort_by_gpa(students, low, high):
-    if low < high:
-        x = partition(students, low, high)
-        sort_by_gpa(students, low, x - 1)
-        sort_by_gpa(students, x + 1, high)
-
 def scores_input(stdscr, students, courses):
     if not students:
         curses_message(stdscr, "There are no students.")
@@ -309,7 +287,7 @@ def sort_students_by_gpa(stdscr, students):
         return
 
     average_gpa(students)
-    sort_by_gpa(students, 0, len(students) - 1)
+    students.sort(key=lambda s: s['GPA'], reverse=True)
     curses_message(stdscr, "Students sorted by GPA (highest to lowest).")
 
 # UI

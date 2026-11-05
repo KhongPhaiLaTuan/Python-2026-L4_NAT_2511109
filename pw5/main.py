@@ -1,10 +1,23 @@
-from input import new_student, new_course, score_modify, scores_input
+from input import new_student, new_course, score_modify, scores_input, compress
 from output import list_students, list_courses, show_course_marks, sort_students_by_gpa
 import curses
+import os
+import zipfile
+import pickle
 
 def main(stdscr):
     students = []
     courses = []
+    a = os.path.dirname(os.path.abspath(__file__))
+    if not os.path.isdir(os.path.join(a, "texts")):
+        os.mkdir(os.path.join(a, "texts"))
+    if os.path.isfile(os.path.join(a, "students.dat")):
+        with zipfile.ZipFile(os.path.join(a, "students.dat"), "r") as z:
+            with z.open("data.pickle") as f:
+                data = pickle.load(f)
+                students = data.get("students", [])
+                courses = data.get("courses", [])
+
     curses.curs_set(0)
 
     options = [
@@ -78,9 +91,11 @@ def main(stdscr):
             elif selected == 7:
                 sort_students_by_gpa(stdscr, students)
             elif selected == 8:
+                compress(stdscr, a, os.path.join(a, "students.dat"), students, courses)
                 break
 
         elif key in (ord("q"), ord("Q")):
+            compress(stdscr, a, os.path.join(a, "students.dat"), students, courses)
             break
 
         if selected < 0:

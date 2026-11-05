@@ -1,7 +1,0 @@
-
- #0 
-Course name: Math 
-ID: 1 
- #1 
-Course name: ICT 
-ID: 2 

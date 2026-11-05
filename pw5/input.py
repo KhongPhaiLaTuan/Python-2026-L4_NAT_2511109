@@ -3,6 +3,11 @@ import curses
 import datetime 
 from helper import ordinal, curses_message, average_gpa
 from domains import Student, Course
+import os
+import zipfile
+import pickle
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def curses_input(stdscr, prompt):
     curses.echo()
@@ -58,7 +63,7 @@ def get_score(stdscr, prompt):
 
 def new_course(stdscr, courses):
     option_num = get_int(stdscr, "\n Enter the number of courses that you want to enter: ", minimum=0)
-    f = open("courses.txt", "a+")
+    f = open(os.path.join(BASE_DIR, "texts", "courses.txt"), "a+")
     for i in range(option_num):
         while True:
             course_id = curses_input(stdscr, f"Enter the {ordinal(i)} course's ID: ").upper()
@@ -75,7 +80,7 @@ def new_course(stdscr, courses):
 
 def new_student(stdscr, students):
     option_num = get_int(stdscr, "\n Enter the number of students that you want to enter: ", minimum=0)
-    f = open("students.txt", "a+")
+    f = open(os.path.join(BASE_DIR, "texts", "students.txt"), "a+")
     for i in range(option_num):
         while True:
             student_id = curses_input(stdscr, f"Enter the {ordinal(i)} student's ID: ").upper()
@@ -101,7 +106,7 @@ def scores_input(stdscr, students, courses):
         return
 
     course_num = len(courses)
-    f = open("marks", "a+")
+    f = open(os.path.join(BASE_DIR, "texts", "marks.txt"), "a+")
     for student in students:
         f.write(f"\n#{students.index(student) + 1} \nName: {student.name} \nID: {student.id}")
         ask = get_int(stdscr, f"\n Enter the number of courses that student {student.name} attends: ", minimum=1, maximum=course_num)
@@ -163,5 +168,21 @@ def score_modify(stdscr, students, courses):
     student.marks[course_name] = get_score(stdscr, f"Enter new {course_name} score for " f"student {student.name}: ")
 
     curses_message(stdscr, "Score modified successfully.")
+
+def compress(stdscr,source, output, students, courses):
+    temp = os.path.join(BASE_DIR, "data.pickle")
+    payload = {"students": students, "courses": courses}
+    with open(temp, "wb") as f:
+        pickle.dump(payload, f)
+    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for root, dir, files in os.walk(source):
+            for file in files:
+                if file != os.path.basename(__file__):
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, source)
+                    z.write(file_path, arcname)
+    if os.path.exists(temp):
+        os.remove(temp)
+    curses_message(stdscr, "Compressed successfully!")
 
 

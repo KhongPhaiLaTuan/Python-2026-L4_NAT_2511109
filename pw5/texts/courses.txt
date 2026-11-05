@@ -1,0 +1,33 @@
+
+#1 
+Course name: Ict 
+ID: 1
+ 
+#2 
+Course name: Calculus 
+ID: 2
+ 
+#1 
+Course name: Python Programming 
+ID: 1
+ 
+#2 
+Course name: Basic Programming 
+ID: 2
+ 
+#1 
+Course name: Advanced Programming With Python 
+ID: 1
+ 
+#2 
+Course name: Basic Programming 
+ID: 2
+ 
+#1 
+Course name: Advanced Programming With Python 
+ID: 1
+ 
+#2 
+Course name: Basic Programming 
+ID: 2
+ 

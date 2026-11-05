@@ -28,24 +28,3 @@ def average_gpa(student):
     else:
         student.gpa = np.mean(scores)
 
-def partition(students, low, high):
-    # pivot
-    x = rn.randint(low, high)
-    students[x], students[high] = (students[high], students[x])
-    pivot = students[high].gpa
-    i = low - 1
-
-    for j in range(low, high):
-        if students[j].gpa > pivot:
-            i += 1
-            students[i], students[j] = students[j], students[i]
-
-    students[i + 1], students[high] = (students[high], students[i + 1])
-
-    return i + 1
-
-def sort_by_gpa(students, low, high):
-    if low < high:
-        x = partition(students, low, high)
-        sort_by_gpa(students, low, x - 1)
-        sort_by_gpa(students, x + 1, high)
