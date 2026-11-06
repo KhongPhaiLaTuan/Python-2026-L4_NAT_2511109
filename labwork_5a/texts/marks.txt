@@ -1,0 +1,12 @@
+
+#1 
+Name: Salfbelin 
+ID: 1
+Basic Programming: 19.0
+Advanced Programming With Python: 18.0
+
+#2 
+Name: Nguyen Anh Tuan 
+ID: 2511109
+Basic Programming: 13.3
+Advanced Programming With Python: 10.2
